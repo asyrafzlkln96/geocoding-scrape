@@ -1,9 +1,10 @@
 # geocoding-scrape
 Scraping tool using Selenium, Geocoding and Flask
 
-# Prerequisite
+# Prerequisites
 - selenium==4.2.0
 - flask==3.0.1
+- Chromedriver.exe downloaded and change the path to the directory of the .exe file
 
 # Scrape data & Serving data in REST API
 - Run python scrape.py
