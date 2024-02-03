@@ -15,7 +15,6 @@ from insert_table import insert_data
 from get_coordinates import get_lat_long
 
 # Tool to scrape subway name, address, opening hours, waze link 
-# ensure have pagination
 # Push all data to DB
 
 # Initialize chrome webdriver, change to your chromedriver.exe path
@@ -28,32 +27,34 @@ input_element = chrome.find_element(By.XPATH, '//input[@id="fp_searchAddress"]')
 # Enter text into the input element
 input_element.send_keys('kuala lumpur')
 
-# Perform any additional actions, like clicking the search button
+# click the search button
 search_button = chrome.find_element(By.XPATH, '//button[@id="fp_searchAddressBtn"]')
 search_button.click()
 
-# location_list = '//div[@id="fp_locationlist"]'
-# locations = chrome.find_elements(By.XPATH, location_list)
 base_class = 'fp_listitem fp_list_marker'
 location_list_xpath = f'//*[contains(@class, "{base_class}")]'
 locations = chrome.find_elements(By.XPATH, location_list_xpath)
 
-# print('locations:',locations)
 
 
 names = []
 addresses = []
 opening_hours_list = []
 waze_urls = []
+latitudes = []
+longitudes = []
 
 for location in locations:
 	try:
 		# Extract information from the results
 		name = location.find_element(By.XPATH, './/h4').text
+		time.sleep(1)
 		address = location.find_element(By.XPATH, './/div[@class="infoboxcontent"]/p[1]').text
 		opening_hours = location.find_element(By.XPATH, './/div[@class="infoboxcontent"]/p[3]').text
-		# waze_url = location.find_element(By.XPATH,'//i[@class="fa-brands fa-waze"]/ancestor::a').get_attribute('href')
+		time.sleep(2)
 		waze_url = location.find_element(By.XPATH, './/a[contains(@href, "waze.com")]').get_attribute('href')
+		time.sleep(2)
+		latitude, longitude = get_lat_long(address)
 
 
 	except NoSuchElementException:
@@ -63,16 +64,17 @@ for location in locations:
 	addresses.append(address)
 	opening_hours_list.append(opening_hours)
 	waze_urls.append(waze_url)
+	latitudes.append(latitude)
+	longitudes.append(longitude)
 	# Print or use the extracted information as needed
 	print("Names:", names)
 	print("Address:", addresses)
 	print("Opening Hours:", opening_hours_list)
 	print('Waze URL:',waze_urls)
+	print('latitudes:',latitudes)
+	print('longitudes:',longitudes)
 
-	insert_data(names, addresses, opening_hours_list, waze_urls)
-	# api_key = 'AIzaSyD3-nDvFPvB6yUMY4VgzKAZGVOj1chFrvk'
+	insert_data(names, addresses, opening_hours_list, waze_urls, latitudes, longitudes)
 
-	# coordinates = get_lat_long(api_key, address)
-	# print('coordinates:',coordinates)
 
 chrome.quit()
