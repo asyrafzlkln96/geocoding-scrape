@@ -25,7 +25,6 @@
         attribution: '&copy; OpenStreetMap contributors'
     }).addTo(map);
 
-    // Replace 'your_flask_endpoint' with the actual endpoint you use in your Flask application
     var geojsonLayer = new L.GeoJSON.AJAX("/subway_locations", {
         onEachFeature: function (feature, layer) {
             if (feature.properties) {
@@ -49,21 +48,16 @@
         }).addTo(map);
     });
 
-        // Replace 'your_flask_endpoint' with the actual endpoint you use in your Flask application
     var currentPage = 1;
 
     function loadMoreData() {
-        // Make an AJAX request to fetch the next page of data
         var url = "/subway_locations?page=" + currentPage;
         var xhr = new XMLHttpRequest();
         xhr.open('GET', url, true);
         xhr.onload = function () {
             if (xhr.status === 200) {
                 var newData = JSON.parse(xhr.responseText);
-                // Add new data to the map or do any necessary processing
-                // ...
 
-                // Increment the current page
                 currentPage++;
             } else {
                 console.error('Failed to load data. Status: ' + xhr.status);
@@ -72,7 +66,6 @@
         xhr.send();
     }
 
-    // Example: Load more data when a button is clicked
     document.getElementById('loadMoreButton').addEventListener('click', loadMoreData);
 
 
