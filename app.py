@@ -6,12 +6,12 @@ app = Flask(__name__)
 @app.route('/subway_locations', methods=['GET'])
 def get_subway_locations():
 	try:
-	    # Connect to the SQLite database subway_locations.db
-	    conn = sqlite3.connect('subway_locations.db')
+	    # Connect to the SQLite database
+	    conn = sqlite3.connect('selenium-method/subway_locations.db')
 	    cursor = conn.cursor()
 
 	    # Retrieve data from the database
-	    cursor.execute('SELECT name, address, opening_hours, waze_url FROM subway_locations')
+	    cursor.execute('SELECT name, address, opening_hours, waze_url, latitudes, longitudes FROM subway_locations')
 	    data = cursor.fetchall()
 
 	    # Close the database connection
@@ -24,7 +24,9 @@ def get_subway_locations():
 	            'name': row[0],
 	            'address': row[1],
 	            'opening_hours': row[2],
-	            'waze_url': row[3]
+	            'waze_url': row[3],
+	            'latitudes': row[4],
+	            'longitudes': row[5]
 	        })
 
 	    # Return the data as JSON
