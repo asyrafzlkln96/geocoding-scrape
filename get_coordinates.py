@@ -1,11 +1,15 @@
-import googlemaps
+from geopy.geocoders import Nominatim
 
-def get_lat_long(api_key, address):
-    gmaps = googlemaps.Client(key=api_key)
-    geocode_result = gmaps.geocode(address)
+def get_lat_long(address):
+    geolocator = Nominatim(user_agent="my_geocoder")
+    location = geolocator.geocode(address)
 
-    if geocode_result and len(geocode_result) > 0:
-        location = geocode_result[0]['geometry']['location']
-        return location['lat'], location['lng']
+    if location:
+        latitude = location.latitude
+        longitude = location.longitude
+        print("Latitude:", location.latitude)
+        print("Longitude:", location.longitude)
     else:
-        return None
+        latitude, longitude = 0, 0
+        print("Could not geocode the address.")
+    return latitude, longitude
